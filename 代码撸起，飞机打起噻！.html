@@ -1,0 +1,535 @@
+<!doctype html><!--声明文档类型为html-->
+<html><!--根标签 超文本标记语言-->
+	<head><!--头部 不可视化标签-->
+		<meta charset="UTF-8"><!--utf-8 :国际编码-->
+		<!--网页三要素-->
+		<title>飞机大战IV1.0</title>
+	    <meta name="Keywords" content=""><!--关键词-->
+		<meta name="Description" content="描述">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<base target='_blank' />
+		<style type="text/css">
+			body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,code,form,fieldset,legend,input,p,th,td{margin:0; padding:0;}
+			img{border:0;vertical-align:middle;}
+			li{list-style:none;}
+			a:active, a:focus { outline:none;}
+			a{text-decoration:none; color:#000;}
+			.clearfix:after{ content:''; display:inline-block;clear:both;}
+			.fl{ float:left;}
+			.fr{ float:right;}
+			body{
+				background-color:black;
+				background-image:
+				radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
+				radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
+				background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
+				background-position: 0 0, 40px 60px, 130px 270px, 70px 100px; 
+			}
+			#wrap{
+				overflow: hidden;
+				position: relative;
+				width: 450px;
+				height: 680px;
+				margin :50px auto;
+				border:4px solid #fff;
+				user-select: none;
+			}
+			#box{
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				left: 0;
+				top: 0;
+				color:#fff;
+				text-align: center;
+			}
+			#box h1{
+				padding: 80px 0px 10px 0px;
+				text-shadow: -6px -2px 20px #ccc, -3px 7px 5px #5d5a5a;
+			}
+			#box li{
+				display: inline-block;
+				margin-top: 60px;
+				width: 250px;
+				height: 50px;
+				background-color: #fff;
+				color:#000;
+				text-align: center;
+				line-height: 50px;
+				font-weight: 700;
+				cursor: pointer;
+			}
+			#box li:hover{
+				background-color: #666;
+				color:#fff;
+			}
+			#game,#over{
+				display: none;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+			}
+			#game .plane,#game .biu,#game .Enemy,#game .boom{
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+			#game .eboom{
+				transition: opacity 1s;
+			}
+			#game .score{
+				position: absolute;
+				left: 8px;
+				top: 8px;
+				color:#fff;
+				font-size: 16px;
+				font-weight: bolder;
+			}
+			#game .plane.bling{
+				animation: bling 1s linear 1;
+			}
+			@keyframes bling{
+				0% {opacity: 1}
+				16%{opacity: 0}
+				34%{opacity: 0.8}
+				52%{opacity: 0}
+				69%{opacity: 0.8}
+				85%{opacity: 0}
+				100%{opacity: 0.8}
+			}
+			#wrap #over{
+				width: 350px;
+				height: 550px;
+				background-color: #fff;
+				left: 0;
+    			top: 0;
+    			right: 0;
+    			bottom: 0;
+    			margin: auto;
+    			text-align: center;
+			}
+			#over h2{
+				padding-top: 100px;
+				font-size: 40px;
+			}
+			#over p{
+				margin: 65px 0 50px 0;
+				font-size: 25px;
+				font-weight: bolder;
+			}
+			#over .initBtn{
+				display: inline-block;
+				width: 70%;
+				height: 50px;
+				background-color: #000;
+				text-align: center;
+				line-height: 50px;
+				color: #fff;
+    			font-size: 20px;
+    			cursor: pointer;
+			}
+			#game.bg1{
+				background: url("img/bg_1.jpg") center/cover;
+			}
+			#game.bg2{
+				background: url("img/bg_2.jpg") center/cover;
+			}
+			#game.bg3{
+				background: url("img/bg_3.jpg") center/cover;
+			}
+			#game.bg4{
+				background: url("img/bg_4.jpg") center/cover;
+			}
+			#game .hp{
+				position: absolute;
+				width: 200px;
+				height: 30px;
+				right: 7px;
+				top: 7px;
+				text-align: right;
+				line-height: 30px
+			}
+			#game .hp .planeHp{
+				margin-right: 4px;
+			}
+			#game .hp .planeHp.delt{
+				animation: delete 1s linear 1;
+			}
+			@keyframes delete{
+				0% {opacity: 1}
+				16%{opacity: 0}
+				34%{opacity: 0.8}
+				52%{opacity: 0}
+				69%{opacity: 0.8}
+				85%{opacity: 0}
+				100%{opacity: 0.8}
+			}
+		</style>
+	</head>
+	<body> <!--身体:网页的内容.可视化标签-->
+		<div id="wrap">
+			<div id="box">
+				<h1>飞机大战1.0版</h1>
+				<ul>
+					<li>简单模式</li>
+					<li>中等模式</li>
+					<li>困难模式</li>
+					<li>充钱模式</li>
+				</ul>
+			</div>
+			<div id="game">
+				<p class="score">0</p>
+				<div class="hp">
+				</div>
+			</div>
+			<div id="over">
+				<h2>GAME OVER</h2>
+				<p class="overscore"></p>
+				<div class="initBtn">重新开始一局</div>
+			</div>
+		</div>
+
+
+		<script>
+			(function() {
+				let aLi = [...document.querySelectorAll("#box ul li")],
+					oWrap = document.getElementById("wrap"),
+					oBox = document.getElementById("box"),
+					oVer = document.getElementById("over"),
+					oGam = document.getElementById("game"),
+					aBiu = document.getElementsByClassName("biu"),
+					oP = document.getElementsByClassName("score")[0],
+					oPlane = document.getElementsByClassName("plane"),
+					overBtn = document.getElementsByClassName("initBtn")[0],
+					overText = document.getElementsByClassName("overscore")[0],
+					oHP = document.querySelector("#game .hp"),
+					aHpimg = document.getElementsByClassName("planeHp"),
+					biuTimer,EnemyTimer,
+					Move = null,
+					score = 0;
+					let bg = ["bg1","bg2","bg3","bg4"];
+
+				aLi.forEach((ele,index)=>{
+					ele.addEventListener("click",function(e){
+						starGame(index,{starX:e.pageX,starY:e.pageY})
+					})
+				},false);
+
+				//开始游戏
+				function starGame(index,pos){
+					starShow(index);
+					Planecreat(index,pos);
+					creatEnemy(index);
+				}
+				//页面显示
+				function starShow(index){
+					oGam.classList.add(bg[index]);
+					oBox.style.display = "none";
+					oGam.style.display = "block";
+					oVer.style.display = "none";
+				}
+				//生成我军
+				function Planecreat(index,{starX,starY}) {
+					let Plane = document.createElement("img"),
+						left = 0,
+						top = 0,
+						width = 50,
+						height = 50;
+						Plane.src = "img/plane_1.png"; //创建我军飞机
+						Plane.className = "plane";
+						Plane.width = width;
+						Plane.height = height;
+						Plane.HP = 5; //建议最大限度8条命
+						Plane.HP =  4 - index;
+						if(index === 3) Plane.HP = 5;
+						left = starX - oWrap.offsetLeft - width/2;
+						top = starY - oWrap.offsetTop - height/2;
+						Plane.style.left = left + "px";
+						Plane.style.top = top + "px";
+						let hp = document.createDocumentFragment();
+						for(let i = 0; i<Plane.HP; i++){
+							let HP = new Image();
+								HP.src = "img/hp.png";
+								HP.width = 20;
+								HP.height = 20;
+								HP.className = "planeHp"
+								hp.appendChild(HP)
+						}
+						oHP.appendChild(hp);
+						oGam.appendChild(Plane);
+						Move = PlaneMove(left,top,width,height,Plane,starX,starY); //我军运动
+						PlaneBiu(index,Plane); //子弹发射
+				}
+
+				//我军运动
+				function PlaneMove(left,top,width,height,Plane,starX,starY){
+					document.addEventListener("mousemove",move,false);
+					let maxTop = oWrap.clientHeight - height/2,
+						maxLeft = oWrap.clientWidth - width/2,
+						minTop = 0,
+						minLeft = -width/2;
+					function move(e){
+						let x = e.pageX - starX,
+							y = e.pageY - starY,
+							newLeft = left + x,
+							newTop = top + y;
+							newLeft = Math.max(newLeft,minLeft);
+							newLeft = Math.min(newLeft,maxLeft);
+							newTop = Math.max(newTop,minTop);
+							newTop = Math.min(newTop,maxTop);
+							Plane.style.left = newLeft + "px";
+							Plane.style.top = newTop + "px";
+					}
+					return move;
+				}	
+
+				//我军子弹
+				function PlaneBiu(index,Plane){
+					let time = [100,150,200,20][index], //模式速度
+					 	 width = 10,
+					 	 height = 20,
+					 	 speed = 12;
+					let oBiu = new Image();  //创建子弹
+						oBiu.src = "img/fire.png";
+						oBiu.width = width;
+						oBiu.height = height;
+						oBiu.className = "biu";
+
+						!function crearBiu () {
+						let Biu = oBiu.cloneNode(), //克隆子弹
+						    Biu2 = oBiu.cloneNode(),
+							top = 0,left = 0,
+							b2top=0,b2left=0;
+							 	if(score >= 10000){
+							 		left = Plane.offsetLeft;
+							 		top = Plane.offsetTop + Biu.offsetHeight + 15;
+							 		Biu.style.left = left + "px";
+							 		Biu.style.top = top + "px";
+
+							 		b2left = Plane.offsetLeft + Plane.offsetWidth - 13;
+							 		b2top = Plane.offsetTop + Biu2.offsetHeight + 15;
+							 		Biu2.style.left = b2left + "px";
+							 		Biu2.style.top = b2top + "px";
+
+							 		oGam.appendChild(Biu);
+							 		oGam.appendChild(Biu2);
+							 	}else {
+							 		left = Plane.offsetLeft + Plane.offsetWidth/2 - width/2;
+							 		top = Plane.offsetTop;
+							 		Biu.style.left = left + "px";
+							 		Biu.style.top = top + "px";
+							 		oGam.appendChild(Biu);
+							 	}
+							 	biuTimer = setTimeout(crearBiu,time);
+							 	//单发弹道
+							 	!function m (){ //子弹向上发射
+							 		if(!Biu || !Biu.parentNode) return;
+							 		top -= speed;
+							 		Biu.style.top = top + "px";
+							 		if(top <= -height){
+							 			oGam.removeChild(Biu);
+							 		}else {
+							 			requestAnimationFrame(m) 
+							 		}
+							 	}();
+							 	//子弹升级
+							 	!function m (){ //子弹向上发射
+							 		if(!score >= 10000) return;
+							 		if(!Biu2 || !Biu2.parentNode) return;
+							 		b2top -= speed;
+							 		Biu2.style.top = b2top + "px";
+							 		if(b2top <= -height){
+							 			oGam.removeChild(Biu2);
+							 		}else {
+							 			requestAnimationFrame(m) 
+							 		}
+							 	}();
+						}();
+				}
+
+				//生成敌军
+				function creatEnemy(index){
+					let Enemynum = [500,300,200,100][index], //生成敌军等级
+						topMax = oWrap.offsetHeight,
+						sWidth = 50,
+						sHeight = 40,
+						bWidth = 130,
+						bHeight = 100,
+						num = 0;
+					//创建小飞机
+					let oSmlEnem = new Image();
+						oSmlEnem.src = "img/enemy_small.png";
+						oSmlEnem.width = sWidth;
+						oSmlEnem.height = sHeight;
+						oSmlEnem.className = "Enemy small";
+					//创建大飞机
+					let oBigEnem = new Image();
+						oBigEnem.src = "img/enemy_big.png";
+						oBigEnem.width = bWidth;
+						oBigEnem.height = bHeight;
+						oBigEnem.className = "Enemy big";
+
+					//生成飞机
+					!function crearEnemy () {
+						let oEnemy = ((++num) % 5 ? oSmlEnem : oBigEnem).cloneNode();
+							oEnemy.HP = (num % 5) ? Math.floor(Math.random()*2+1) : 10;
+						let left = Math.floor(Math.random()*oWrap.offsetWidth - oEnemy.width/2),
+							top = -(oEnemy.height);
+						oEnemy.style.top = top + "px";
+						oEnemy.style.left = left + "px";
+						oGam.appendChild(oEnemy);
+						let speed = Math.floor(Math.random()*4+2);
+						EnemyTimer = setTimeout(crearEnemy,Enemynum);
+						//敌军下落
+						!function m(){
+							if(!oEnemy || !oEnemy.parentNode) return;
+							top += speed;
+							oEnemy.style.top = top + "px";
+							if(top >= topMax){
+								oGam.removeChild(oEnemy);
+							}else {
+								requestAnimationFrame(m);
+							}
+						 	Pz(oEnemy);
+						 	Pz2(oEnemy);
+						}()
+					}();
+				}
+
+				//检测敌军与所有子弹碰撞
+				function Pz(oEnemy){
+					if(!oEnemy.parentNode) return;
+					let b = [...aBiu],
+						e = oEnemy,
+						len = b.length;
+						
+					for(let i = 0; i<len; i++){
+						if(collision(b[i],e)){
+							oGam.removeChild(b[i]);
+							e.HP--;
+							updeteScore();
+							if(!e.HP){
+								updeteScore(e);
+								oP.innerText = score;
+								EnemyBom(e);
+								oGam.removeChild(e);
+								break;
+							}
+						}
+					}
+				}
+
+				//检测我军与敌军的碰撞
+				function Pz2(oEnemy){
+					let e = oEnemy;
+					let	p = oPlane[0];
+					let aHP = [...aHpimg];
+					if(!oEnemy.parentNode) return;
+					if(!p) return;
+						if(collision(e,p)){
+							EnemyBom(e); //碰到的敌军爆炸
+							oGam.removeChild(e);
+							updeteScore(e) //更新分数
+							p.HP--;
+							if(p.HP === 0){
+								document.removeEventListener("mousemove",Move,false);
+								!aHP[0] || aHP[0].classList.add("delt");
+								!aHP[0]	|| aHP[0].addEventListener("animationend",function(){
+									oHP.removeChild(aHP[0]);
+								})
+								clearTimeout(biuTimer);
+								clearTimeout(EnemyTimer);
+								planeBoom(p);
+								oGam.removeChild(p);
+								GameOver();
+								
+							}else {
+								p.classList.add("bling");
+								!aHP[0] || oHP.removeChild(aHP[0]);
+								setTimeout(()=>{p.classList.remove("bling")},1000);
+							}
+						}
+				}
+
+				//游戏结束
+				function GameOver(){
+					setTimeout(()=>{
+					 	oGam.style.display = "none";
+					 	oVer.style.display = "block";
+					 	overText.innerText = `得分:${score}`;
+					 	oGam.removeChild(oP);
+					 	oGam.removeChild(oHP);
+					},1500)
+					//重新开始游戏
+					overBtn.addEventListener("click",function(){
+					 	oGam.style.display = "none";
+					 	oVer.style.display = "none";
+					 	oBox.style.display = "block";
+					 	oGam.className = "";
+					 	oGam.innerHTML = "";
+					 	oGam.appendChild(oP);
+					 	oGam.appendChild(oHP);
+					 	score = 0;
+					 	oP.innerText = score;
+					 },false)
+				}
+
+				//我军爆炸
+				function planeBoom(p){
+					let Boom = new Image();
+						Boom.src = "img/boom_big.png";
+						Boom.width = p.width;
+						Boom.height = p.height;
+						Boom.className = "boom";
+						Boom.style.left = p.offsetLeft + "px";
+						Boom.style.top = p.offsetTop + "px";
+						oGam.appendChild(Boom);
+						setTimeout(()=>{Boom.style.opacity = 0},1500);
+				}
+
+				//检测碰撞
+				function collision(obj1,obj2){
+					let R1 = obj1.offsetLeft + obj1.offsetWidth,
+						B1 = obj1.offsetTop + obj1.offsetHeight,
+						L1 = obj1.offsetLeft,
+						T1 = obj1.offsetTop;
+					let R2 = obj2.offsetLeft + obj2.offsetWidth,
+						B2 = obj2.offsetTop + obj2.offsetHeight,
+						L2 = obj2.offsetLeft,
+						T2 = obj2.offsetTop;
+						return !(R1<L2 || B1<T2 || L1>R2 || T1>B2);
+				}
+
+				//敌军飞机爆炸
+				function EnemyBom(e){
+					let oBoom = new Image();
+						oBoom.src = "img/boom_small.png";
+						oBoom.width = e.width;
+						oBoom.height = e.height;
+						oBoom.className = "boom eboom";
+						oBoom.style.left = e.offsetLeft + "px";
+						oBoom.style.top = e.offsetTop + "px";
+						oGam.appendChild(oBoom);
+						setTimeout(()=>{oBoom.style.opacity = 0});
+						oBoom.addEventListener("transitionend",function() {
+							oGam.removeChild(this);
+						});
+				}
+
+				//分数变化函数
+				function updeteScore(e){
+					if(!e){
+						score += 10;
+					}else if (e.classList.contains("small")) {
+						score += 100;
+					}else {
+						score += 200;
+					}
+					oP.innerText = score;
+				}
+			})();
+		</script>
+	</body>
+</html>
